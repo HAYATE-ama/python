@@ -160,4 +160,100 @@ function submitClimbingForm(event) {
                 messageDiv.className = "error";
             }
         });
+    // =========================================================================
+    // P003: 一括履歴表示用のデータロード処理
+    // =========================================================================
+
+    // 画面読み込み時の初期化処理（既存のDOMContentLoadedの中に追記するか、安全に別イベントとして定義）
+    document.addEventListener("DOMContentLoaded", function () {
+        // 履歴画面（P003）の要素が存在する場合のみ実行
+        const historyBody = document.getElementById("historyBody");
+        if (!historyBody) return; // 他の画面ならここで処理を抜ける
+
+        const gasEndpointInput = document.getElementById("gasEndpoint");
+        const loadingDiv = document.getElementById("loading");
+        const historyContainer = document.getElementById("historyContainer");
+        const errorDiv = document.getElementById("errorMessage");
+
+        if (!gasEndpointInput || !gasEndpointInput.value) {
+            showError("システムエラー: 接続先URLが見つかりません。");
+            return;
+        }
+
+        // GASからデータを取得（GETリクエスト）
+        fetch(gasEndpointInput.value)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("ネットワーク応答が正常ではありません。");
+                }
+                return response.json();
+            })
+            .then(res => {
+                if (res.status === "success" && Array.isArray(res.data)) {
+                    renderHistoryTable(res.data, historyBody);
+                    // ローディングを隠してテーブルを表示
+                    if (loadingDiv) loadingDiv.classList.add("hidden");
+                    if (historyContainer) historyContainer.classList.remove("hidden");
+                } else {
+                    throw new Error(res.message || "データの取得に失敗しました。");
+                }
+            })
+            .catch(error => {
+                console.error("Fetch Error:", error);
+                showError("履歴データの読み込みに失敗しました。時間をおいて再度お試しください。");
+            });
+
+        // エラー表示用の共通サブルーチン
+        function showError(message) {
+            if (loadingDiv) loadingDiv.classList.add("hidden");
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.classList.remove("hidden");
+            }
+        }
+    });
+
+    /**
+     * 取得した履歴配列をもとに、HTMLテーブルの行（tr）を動的に生成する
+     */
+    function renderHistoryTable(dataList, targetBody) {
+        targetBody.innerHTML = ""; // 既存の中身をクリア
+
+        if (dataList.length === 0) {
+            targetBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">データがまだ登録されていません。</td></tr>';
+            return;
+        }
+
+        dataList.forEach(item => {
+            const tr = document.createElement("tr");
+
+            // 1. 日付セル
+            const tdDate = document.createElement("td");
+            tdDate.className = "col-date";
+            tdDate.textContent = item.date || "-";
+            tr.appendChild(tdDate);
+
+            // 2. 場所/壁セル（「ジム名（壁名）」の形式でマージして表示幅を節約）
+            const tdLoc = document.createElement("td");
+            tdLoc.className = "col-loc";
+            const cleanLocation = (item.location || "").replace(/_/g, " "); // 英名のアンダースコアをスペースに置換
+            tdLoc.innerHTML = `<strong>${cleanLocation}</strong><br/><span class="sub-text">${item.wall || "-"}</span>`;
+            tr.appendChild(tdLoc);
+
+            // 3. グレードセル
+            const tdGrade = document.createElement("td");
+            tdGrade.className = "col-grade";
+            tdGrade.textContent = item.grade || "-";
+            tr.appendChild(tdGrade);
+
+            // 4. 結果セル（結果のステータスによってCSSクラスを動的に変えるとより見やすくなります）
+            const tdResult = document.createElement("td");
+            tdResult.className = "col-result";
+            tdResult.textContent = item.result || "-";
+            tr.appendChild(tdResult);
+
+            // テーブルボディに行を追加
+            targetBody.appendChild(tr);
+        });
+    }
 }
