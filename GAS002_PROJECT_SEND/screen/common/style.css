@@ -295,3 +295,160 @@ input:checked + .slider:before {
 }
 #message.success { background-color: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
 #message.error { background-color: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid var(--error); }
+
+/* =========================================================================
+   7. 履歴画面（P003）専用：タイムライン＆カード型UIスタイル
+   ========================================================================= */
+
+/* ステータスメッセージ表示 */
+.status-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.status-message i {
+  margin-bottom: 12px;
+  color: var(--primary);
+}
+
+/* 日付セッションごとの外枠ブロック */
+.session-block {
+  margin-bottom: 32px;
+}
+
+/* スクロール時に画面上部に固定されるStickyヘッダー */
+.session-date-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: rgba(15, 23, 42, 0.9); /* ボディーの背景色に合わせた半透明 */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding: 10px 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+  z-index: 10;
+  margin-bottom: 16px;
+  display: block;
+}
+.session-date-header i {
+  margin-right: 8px;
+}
+
+/* 個別の記録カード */
+.climb-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-md);
+  display: block;
+}
+
+/* カード上段：ロケーション、グレード */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.card-location {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.card-location i {
+  margin-right: 6px;
+  color: var(--border);
+}
+.card-grade {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* カード中段：課題名（ターゲット） */
+.card-body-row {
+  margin-bottom: 14px;
+}
+.card-target-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* カード下段：バッジとスタイル */
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid rgba(71, 85, 105, 0.3);
+  padding-top: 12px;
+}
+
+/* 成果判定用Pillバッジマスタ */
+.card-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.badge-flash {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.badge-rp {
+  background-color: rgba(14, 165, 233, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+.badge-atm {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.badge-default {
+  background-color: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.card-style-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.card-style-info i {
+  margin-right: 4px;
+  color: var(--border);
+}
+
+/* カード最下段：ネストされたメモ欄 */
+.card-memo-box {
+  background-color: var(--bg-main);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border-left: 3px solid var(--border);
+}
+.card-memo-box i {
+  margin-right: 6px;
+  color: var(--border);
+}
+
+/* グローバルナビ内の文字位置微調整用 */
+.global-nav .nav-item i {
+  font-size: 1.2rem;
+  margin-bottom: 3px;
+}

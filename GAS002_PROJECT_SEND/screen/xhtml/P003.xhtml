@@ -1,58 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PROJECT: SEND - HISTORY</title>
-  <link rel="stylesheet" type="text/css" href="../common/style.css" />
-
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-transitional" />
-  <meta name="apple-mobile-web-app-title" content="ClimbRecord" />
-
-  <link rel="apple-touch-icon" href="../img/icon.jpg" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Climbing Log - 履歴</title>
+    <link rel="stylesheet" type="text/css" href="../common/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
-<body class="history-page">
-  <div id="wrapper">
-    <div class="screen-id">SCREEN ID: P003</div>
-    <h1>一括履歴・実績</h1>
-    <div class="screen-subtitle">ジム・外岩のアクティビティ一元管理</div>
+<body>
 
-    <div id="loading" class="loading-box">
-      <div class="spinner"></div>
-      <p>スプレッドシートから履歴を読み込み中...</p>
+    <div id="wrapper">
+        <h1>Climbing Timeline</h1>
+        <div class="screen-subtitle">ジム・外岩の一元化アクティビティ履歴</div>
+
+        <div class="tab-container" style="display: flex; gap: 8px; margin: 16px 0;">
+            <button type="button" id="tab-all" class="tab-btn" onclick="filterTimeline('all')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--primary); color: var(--primary); background: transparent;">
+                <i class="fa-solid fa-list" style="margin-right: 4px;"></i>すべて
+            </button>
+            <button type="button" id="tab-gym" class="tab-btn" onclick="filterTimeline('gym')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--border); color: var(--text-muted); background: transparent;">
+                <i class="fa-solid fa-dumbbell" style="margin-right: 4px;"></i>ジム
+            </button>
+            <button type="button" id="tab-rock" class="tab-btn" onclick="filterTimeline('rock')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--border); color: var(--text-muted); background: transparent;">
+                <i class="fa-solid fa-mountain" style="margin-right: 4px;"></i>外岩
+            </button>
+        </div>
+
+        <div id="historyStatus" class="status-message">
+            <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+            <div>履歴データを読み込み中...</div>
+        </div>
+
+        <div id="timelineContainer" class="hidden"></div>
     </div>
 
-    <div id="errorMessage" class="error hidden"></div>
-
-    <div id="historyContainer" class="hidden">
-      <div class="table-responsive">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th class="col-date">日付</th>
-              <th class="col-loc">場所/壁</th>
-              <th class="col-grade">級/V</th>
-              <th class="col-result">結果</th>
-            </tr>
-          </thead>
-          <tbody id="historyBody">
-            </tbody>
-        </table>
-      </div>
+    <div class="global-nav">
+        <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">
+            <i class="fa-solid fa-dumbbell"></i><span>ジム登録</span>
+        </button>
+        <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">
+            <i class="fa-solid fa-mountain"></i><span>外岩登録</span>
+        </button>
+        <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">
+            <i class="fa-solid fa-clock-rotate-left"></i><span>履歴一覧</span>
+        </button>
     </div>
-  </div>
 
-  <div class="global-nav">
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P000')">ホーム</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">ジム記録</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">外岩記録</button>
-    <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">履歴</button>
-  </div>
+    <input type="hidden" id="gasEndpoint" value="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec" />
 
-  <input type="hidden" id="gasEndpoint" value="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec" />
-
-  <script type="text/javascript" src="../common/climbingCore.js"></script>
+    <script type="text/javascript" src="../common/climbingCore.js"></script>
 </body>
 </html>
