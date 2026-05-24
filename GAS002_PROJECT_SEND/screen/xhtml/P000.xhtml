@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>クライミング管理システム - HOME</title>
+    <link rel="stylesheet" type="text/css" href="../common/style.css" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-transitional" />
+    <meta name="apple-mobile-web-app-title" content="ClimbRecord" />
+
+  <link rel="apple-touch-icon" href="../img/icon.jpg" />
+</head>
+
+<body>
+    <div id="wrapper">
+        <h1>クライミング記録管理システム</h1>
+        <div class="screen-subtitle">ダッシュボードメニュー</div>
+        <div class="main-card menu-container">
+            <button type="button" class="btn-submit" style="margin-bottom: 16px;"
+                onclick="RouteSelector.moveTo('P001')">ジム記録画面 (P001) へ移動</button>
+            <button type="button" class="btn-submit" onclick="RouteSelector.moveTo('P002')">外岩記録画面 (P002) へ移動</button>
+        </div>
+    </div>
+    <div class="global-nav">
+        <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P000')">ホーム</button>
+        <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">ジム記録</button>
+        <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">外岩記録</button>
+    </div>
+    <script type="text/javascript" src="../common/climbingCore.js"></script>
+</body>
+
+</html>

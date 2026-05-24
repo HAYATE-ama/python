@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PROJECT: SEND</title>
+  <link rel="stylesheet" type="text/css" href="../common/style.css" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-transitional" />
+  <meta name="apple-mobile-web-app-title" content="ClimbRecord" />
+
+  <link rel="apple-touch-icon" href="../img/icon.jpg" />
+</head>
+<body>
+  <div id="wrapper">
+    <div class="screen-id">SCREEN ID: P001</div>
+    <h1>ジム用 課題記録</h1>
+    <div class="screen-subtitle">インドアボルダリングアクティビティ</div>
+    <div class="main-card">
+      <form id="climbingForm" action="#"
+        data-url="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec"
+        data-msg="ジムの記録を登録しました！">
+        <div class="form-group">
+          <label for="date">日付</label>
+          <input type="date" id="date" name="date" required="required" />
+        </div>
+        <div class="form-group">
+          <label for="gym">ジム名</label>
+          <select id="gym" name="gym" required="required">
+            <option value="" disabled="disabled" selected="selected" hidden="hidden">ジムを選択してください</option>
+            <option value="B-PUMP_Akihabara">B-PUMP TOKYO 秋葉原</option>
+            <option value="PUMP1_Kawaguchi">PUMP1 Kawaguchi</option>
+            <option value="Base_Camp_Tokyo">Base Camp Tokyo</option>
+            <option value="ROCKY_Shinagawa">ROCKY 品川</option>
+            <option value="others">その他ホーム/遠征先</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="wall">壁（傾斜など）</label>
+          <select id="wall" name="wall">
+            <option value="スラブ">スラブ</option>
+            <option value="垂壁">垂壁</option>
+            <option value="薄かぶり（95〜110度）">薄かぶり（95〜110度）</option>
+            <option value="強傾斜（115〜130度）">強傾斜（115〜130度）</option>
+            <option value="ルーフ">ルーフ</option>
+            <option value="マントル/その他">マントル/その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="grade-header">
+            <label>グレード</label>
+            <div class="toggle-container">
+              <span id="toggle-label-jp" class="toggle-label active">日本</span>
+              <label class="switch">
+                <input type="checkbox" id="gradeSystemToggle" onchange="switchGradeSystem()" />
+                <span class="slider round"></span>
+              </label>
+              <span id="toggle-label-v" class="toggle-label">V-Grade</span>
+            </div>
+          </div>
+          <select id="gradeJp" class="grade-select" required="required" onchange="syncGradeValue(this)">
+            <option value="" disabled="disabled" selected="selected" hidden="hidden">グレードを選択</option>
+            <option value="jp_9q">9級</option>
+            <option value="jp_8q">8級</option>
+            <option value="jp_7q">7級</option>
+            <option value="jp_6q">6級</option>
+            <option value="jp_5q">5級</option>
+            <option value="jp_4q">4級</option>
+            <option value="jp_3q">3級</option>
+            <option value="jp_2q">2級</option>
+            <option value="jp_1q">1級</option>
+            <option value="jp_1d">初段</option>
+            <option value="jp_2d">二段</option>
+            <option value="jp_3d">三段</option>
+          </select>
+          <select id="gradeV" class="grade-select hidden" onchange="syncGradeValue(this)">
+            <option value="" disabled="disabled" selected="selected" hidden="hidden">Select V-Grade</option>
+            <option value="v_3">V3</option>
+            <option value="v_4">V4</option>
+            <option value="v_5">V5</option>
+            <option value="v_6">V6</option>
+            <option value="v_7">V7</option>
+            <option value="v_8">V8</option>
+            <option value="v_9">V9</option>
+            <option value="v_10">V10</option>
+            <option value="v_11">V11</option>
+          </select>
+          <input type="hidden" id="grade" name="grade" required="required" />
+        </div>
+        <div class="form-group">
+          <label for="style">ホールド/スタイル</label>
+          <input type="text" id="style" name="style" placeholder="例: スローパー、ダイノ、ポケット、足限定" />
+        </div>
+        <div class="form-group">
+          <label for="result">結果</label>
+          <select id="result" name="result">
+            <option value="完登（Flash）">完登（Flash）</option>
+            <option value="完登（Redpoint）">完登（Redpoint）</option>
+            <option value="最高到達点（ワンムーブ残し）">最高到達点（ワンムーブ残し）</option>
+            <option value="バラし完了">バラし完了</option>
+            <option value="未解決（宿題）">未解決（宿題）</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="memo">メモ・反省</label>
+          <textarea id="memo" name="memo" rows="3" placeholder="例: 核心の右手はピンチ持ち、左足はスメア意識。"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">記録する</button>
+      </form>
+      <div id="message"></div>
+    </div>
+  </div>
+  <div class="global-nav">
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P000')">ホーム</button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">ジム記録</button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">外岩記録</button>
+  </div>
+  <script type="text/javascript" src="../common/climbingCore.js"></script>
+</body>
+</html>

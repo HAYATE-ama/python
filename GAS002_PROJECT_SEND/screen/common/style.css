@@ -1,0 +1,297 @@
+@charset "UTF-8";
+
+/* =========================================================================
+   1. デザインシステム・トークン定義（CSS変数）
+   ========================================================================= */
+:root {
+  /* カラーパレット */
+  --bg-main: #0f172a;       /* 深みのあるダークネイビー（モダンテック風） */
+  --bg-card: #1e293b;       /* カード・フォームの背景 */
+  --bg-input: #334155;      /* 入力フィールドの背景 */
+  --text-main: #f8fafc;     /* メインテキスト（ほぼ白） */
+  --text-muted: #94a3b8;    /* 補足テキスト（グレー） */
+  --primary: #0ea5e9;       /* アクセント：鮮やかなアクアブルー */
+  --primary-hover: #38bdf8; /* アクセントホバー */
+  --success: #10b981;       /* 完登・成功：エメラルドグリーン */
+  --error: #ef4444;         /* エラー・未解決：クリムゾンレッド */
+  --border: #475569;        /* ボーダー・線 */
+
+  /* シャドウ・アール（角丸） */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+
+  /* タイポグラフィ */
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* =========================================================================
+   2. リセット & ベーススタイル（XHTML厳格準拠）
+   ========================================================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 60px; /* ナビゲーションバー用の余白 */
+}
+
+/* =========================================================================
+   3. 共通レイアウト & コンテナ
+   ========================================================================= */
+#wrapper {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.screen-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* カード型コンテナ（HOME、P001、P002共通） */
+.main-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+/* =========================================================================
+   4. モダン・フォーム要素スタイル
+   ========================================================================= */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+/* 入力エリア（input, select, textarea一律最適化） */
+input[type="date"],
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+}
+
+/* 横並びグリッドレイアウト（例：天気・気温・湿度、壁・スタイルなど） */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.form-grid .form-group {
+  margin-bottom: 0;
+}
+
+/* =========================================================================
+   5. 共通コンポーネント（ボタン・トグル・UI）
+   ========================================================================= */
+
+/* メイン送信ボタン */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-submit:active {
+  transform: scale(0.98);
+}
+
+/* =========================================================================
+   グレード切り替えトグルUI（P001 / P002 共通）
+   ========================================================================= */
+.grade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--bg-main);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.toggle-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+  display: inline-block;
+  line-height: 1;
+}
+
+.toggle-label.active {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-flex; 
+  align-items: center; 
+  width: 36px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--bg-input);
+  transition: .3s;
+}
+
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px; 
+  width: 14px;
+  left: 3px; 
+  top: 3px; 
+  background-color: white;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background-color: var(--primary);
+}
+
+
+input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================================
+   6. グローバル下部ナビゲーションバー（RouteSelector連動）
+   ========================================================================= */
+.global-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 -4px 10px rgb(0 0 0 / 0.3);
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 33.33%;
+  height: 100%;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--primary);
+}
+
+/* メッセージエリア */
+#message {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 0.9rem;
+}
+#message.success { background-color: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+#message.error { background-color: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid var(--error); }
