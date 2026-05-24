@@ -4,14 +4,14 @@
 
 // ルーティングオブジェクト
 window.RouteSelector = {
-    moveTo: function(pageCode) {
+    moveTo: function (pageCode) {
         if (!pageCode) return;
         window.location.href = './' + pageCode + '.xhtml';
     }
 };
 
 // 画面読み込み時の初期化処理
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // 1. フォーム送信イベントの動的紐付け
     const form = document.getElementById("climbingForm");
     if (form) {
@@ -20,13 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 2. デートピッカー制御（枠内のどこをクリックしてもカレンダーを強制展開）
     const dateInputs = document.querySelectorAll('input[type="date"]');
-    dateInputs.forEach(function(input) {
-        input.addEventListener('click', function() {
-            if (typeof this.showPicker === 'function') {
-                this.showPicker();
-            }
-        });
-        input.addEventListener('focus', function() {
+    dateInputs.forEach(function (input) {
+        input.addEventListener('click', function () {
             if (typeof this.showPicker === 'function') {
                 this.showPicker();
             }
@@ -55,7 +50,7 @@ function switchGradeSystem() {
 
         gradeV.classList.remove("hidden");
         gradeV.setAttribute("required", "required");
-        
+
         labelJp.classList.remove("active");
         labelV.classList.add("active");
     } else {
@@ -66,7 +61,7 @@ function switchGradeSystem() {
 
         gradeJp.classList.remove("hidden");
         gradeJp.setAttribute("required", "required");
-        
+
         labelV.classList.remove("active");
         labelJp.classList.add("active");
     }
@@ -92,11 +87,11 @@ function syncGradeValue(selectElement) {
  */
 function submitClimbingForm(event) {
     event.preventDefault();
-    
+
     const form = document.getElementById("climbingForm");
     const hiddenGrade = document.getElementById("grade");
     const toggle = document.getElementById("gradeSystemToggle");
-    
+
     // 送信直前に、現在アクティブなプルダウンから値を確実に回収する防御コード
     if (hiddenGrade && toggle) {
         const activeSelect = toggle.checked ? document.getElementById("gradeV") : document.getElementById("gradeJp");
@@ -110,7 +105,7 @@ function submitClimbingForm(event) {
         alert("グレードを正しく選択してください。");
         return;
     }
-    
+
     const GAS_WEB_APP_URL = form.getAttribute("data-url");
     const successMessage = form.getAttribute("data-msg") || "データを登録しました！";
 
@@ -125,10 +120,10 @@ function submitClimbingForm(event) {
         messageDiv.className = "";
     }
 
-   // フォーム内のすべての入力をオブジェクト化
+    // フォーム内のすべての入力をオブジェクト化
     const formData = new FormData(form);
     const params = new URLSearchParams();
-    
+
     formData.forEach((value, key) => {
         params.append(key, value);
     });
@@ -145,24 +140,24 @@ function submitClimbingForm(event) {
         },
         body: params.toString()
     })
-    .then(() => {
-        if (messageDiv) {
-            messageDiv.textContent = successMessage;
-            messageDiv.className = "success";
-        }
-        form.reset();
-        if (hiddenGrade) hiddenGrade.value = "";
-        
-        if (toggle) {
-            toggle.checked = false;
-            switchGradeSystem();
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        if (messageDiv) {
-            messageDiv.textContent = "エラーが発生しました。時間をおいて再度お試しください。";
-            messageDiv.className = "error";
-        }
-    });
+        .then(() => {
+            if (messageDiv) {
+                messageDiv.textContent = successMessage;
+                messageDiv.className = "success";
+            }
+            form.reset();
+            if (hiddenGrade) hiddenGrade.value = "";
+
+            if (toggle) {
+                toggle.checked = false;
+                switchGradeSystem();
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            if (messageDiv) {
+                messageDiv.textContent = "エラーが発生しました。時間をおいて再度お試しください。";
+                messageDiv.className = "error";
+            }
+        });
 }
