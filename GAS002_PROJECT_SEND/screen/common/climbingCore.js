@@ -1,12 +1,12 @@
 /**
- * クライミング管理システム - 共通コアスクリプト（input_source対応・画面コード文字列版）
+ * クライミング管理システム - 共通コアスクリプト（input_source対応・項目差分拡張版）
  */
 
 // ルーティングオブジェクト
 window.RouteSelector = {
     moveTo: function (pageCode) {
         if (!pageCode) return;
-        window.location.href = './' + pageCode + '.xhtml';
+        window.location.href = '../xhtml/' + pageCode + '.xhtml';
     }
 };
 
@@ -53,9 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(res => {
                 if (res.status === "success" && Array.isArray(res.data)) {
                     if (statusMessage) statusMessage.classList.add("hidden");
-                    
+
                     window.cachedClimbingData = res.data;
-                    
+
                     // 初期表示は「すべて」を表示
                     renderCardTimeline(window.cachedClimbingData, timelineContainer);
                     timelineContainer.classList.remove("hidden");
@@ -120,11 +120,12 @@ function renderCardTimeline(dataList, targetContainer) {
             badgeClass = "badge-atm";
         }
 
-        const cleanLocation = (item.location || "").replace(/_/g, " ");
+        const cleanLocation = String(item.location || "").replace(/_/g, " ");
 
-        // カードのHTMLモジュールを組み立て
-        htmlBuffer += `  <div class="climb-card">`;
-        htmlBuffer += `    <div class="card-header-row">`;
+        // カードのHTMLモジュール組み立て
+        htmlBuffer += `  <div class="climb-card" style="position: relative; cursor: pointer;" data-no="${item.no}" onclick="openEditModal('${item.no}')">`;
+        htmlBuffer += `    <span class="card-no-badge" style="position: absolute; top: 8px; right: 12px; font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">No.${item.no || "-"}</span>`;
+        htmlBuffer += `    <div class="card-header-row" style="padding-right: 45px;">`;
         htmlBuffer += `      <span class="card-location"><i class="fa-solid fa-location-dot"></i>${cleanLocation}</span>`;
         htmlBuffer += `      <span class="card-grade">${item.grade || "-"}</span>`;
         htmlBuffer += `    </div>`;
@@ -136,10 +137,30 @@ function renderCardTimeline(dataList, targetContainer) {
         htmlBuffer += `      <span class="card-style-info"><i class="fa-solid fa-angles-up"></i>${item.style || "-"}</span>`;
         htmlBuffer += `    </div>`;
 
+        // 外岩（P002）専用の拡張詳細項目表示エリア
+        let detailsHtml = "";
+        if (item.input_source === "P002" && item.details) {
+            const d = item.details;
+            detailsHtml += `<div class="card-sub-details" style="font-size:0.85rem; color:var(--text-muted); margin-top:6px; border-top:1px dashed var(--border); padding-top:6px; line-height:1.4;">`;
+            if (d.rock_area && d.rock_area !== "-") {
+                detailsHtml += `<div><i class="fa-solid fa-map-pin" style="width:16px;"></i><strong>エリア:</strong> ${d.rock_area}</div>`;
+            }
+            if (d.hold_type && d.hold_type !== "-") {
+                detailsHtml += `<div><i class="fa-solid fa-hand" style="width:16px;"></i><strong>ホールド:</strong> ${d.hold_type}</div>`;
+            }
+            if (d.weather_info && d.weather_info !== "-") {
+                detailsHtml += `<div><i class="fa-solid fa-cloud-sun" style="width:16px;"></i><strong>環境:</strong> ${d.weather_info}</div>`;
+            }
+            detailsHtml += `</div>`;
+        }
+
         const memoText = item.memo || "";
-        if (memoText && memoText.trim() !== "") {
+        if ((memoText && memoText.trim() !== "" && memoText !== "-") || detailsHtml !== "") {
             htmlBuffer += `    <div class="card-memo-box">`;
-            htmlBuffer += `      <i class="fa-solid fa-quote-left"></i>${memoText}`;
+            if (memoText && memoText !== "-") {
+                htmlBuffer += `      <i class="fa-solid fa-quote-left"></i>${memoText}`;
+            }
+            htmlBuffer += detailsHtml;
             htmlBuffer += `    </div>`;
         }
         htmlBuffer += `  </div>`;
@@ -159,20 +180,18 @@ function filterTimeline(type) {
     const container = document.getElementById("timelineContainer");
     if (!container || !window.cachedClimbingData) return;
 
-    // 1. タブボタンのActiveスタイルの切り替え
     const tabs = document.querySelectorAll(".tab-btn");
     tabs.forEach(tab => {
         tab.style.border = "1px solid var(--border)";
         tab.style.color = "var(--text-muted)";
     });
-    
+
     const activeTab = document.getElementById(`tab-${type}`);
     if (activeTab) {
         activeTab.style.border = "1px solid var(--primary)";
         activeTab.style.color = "var(--primary)";
     }
 
-    // 2. 「input_source」列のフラグ（P001 / P002）によるデータ抽出処理
     let filteredData = [];
     if (type === "all") {
         filteredData = window.cachedClimbingData;
@@ -191,7 +210,6 @@ function filterTimeline(type) {
         });
     }
 
-    // 3. 再描画を実行
     renderCardTimeline(filteredData, container);
 }
 
@@ -281,12 +299,10 @@ function submitClimbingForm(event) {
     const formData = new FormData(form);
     const params = new URLSearchParams();
 
-    // パス名から安全にP001かP002かを識別し、判定値を格納
     const currentUrl = window.location.pathname;
     const isGymPage = currentUrl.includes("P001");
     params.append("input_source", isGymPage ? "P001" : "P002");
 
-    // 重複送信を防ぎつつフォームパラメータをコピー
     formData.forEach((value, key) => {
         if (key !== "input_source") {
             params.append(key, value);
@@ -305,8 +321,8 @@ function submitClimbingForm(event) {
     })
         .then(() => {
             if (messageDiv) {
-                messageDiv.textContent = successMessage;
-                messageDiv.className = "success";
+                document.getElementById("message").textContent = successMessage;
+                document.getElementById("message").className = "success";
             }
             form.reset();
             if (hiddenGrade) hiddenGrade.value = "";
@@ -323,4 +339,214 @@ function submitClimbingForm(event) {
                 messageDiv.className = "error";
             }
         });
+}
+
+// =========================================================================
+// 4. 履歴編集モーダル 制御・通信ロジック (P003追加分)
+// =========================================================================
+
+/**
+ * モーダル専用のグレード切り替え制御
+ */
+function switchModalGradeSystem() {
+    const toggle = document.getElementById("modalGradeSystemToggle");
+    const gradeJp = document.getElementById("editGradeJp");
+    const gradeV = document.getElementById("editGradeV");
+    const labelJp = document.getElementById("modal-toggle-label-jp");
+    const labelV = document.getElementById("modal-toggle-label-v");
+
+    if (!toggle || !gradeJp || !gradeV || !labelJp || !labelV) return;
+
+    if (toggle.checked) {
+        gradeJp.classList.add("hidden");
+        gradeJp.removeAttribute("required");
+        gradeV.classList.remove("hidden");
+        gradeV.setAttribute("required", "required");
+        labelJp.classList.remove("active");
+        labelV.classList.add("active");
+    } else {
+        gradeV.classList.add("hidden");
+        gradeV.removeAttribute("required");
+        gradeJp.classList.remove("hidden");
+        gradeJp.setAttribute("required", "required");
+        labelV.classList.remove("active");
+        labelJp.classList.add("active");
+    }
+}
+
+function syncModalGradeValue(selectElement) {
+    const hiddenGrade = document.getElementById("editGrade");
+    if (hiddenGrade && selectElement) {
+        hiddenGrade.value = selectElement.value;
+    }
+}
+
+/**
+ * タイムラインカードクリック時：対象データをモーダルフォームへ展開して表示
+ */
+function openEditModal(no) {
+    if (!window.cachedClimbingData) return;
+
+    const targetItem = window.cachedClimbingData.find(item => String(item.no) === String(no));
+    if (!targetItem) return;
+
+    // フォームへの値マッピング
+    document.getElementById("editNo").value = targetItem.no;
+    document.getElementById("editNoTxt").textContent = targetItem.no;
+    document.getElementById("editSource").value = targetItem.input_source;
+
+    // 日付フォーマット変換 ("2026/05/26" -> "2026-05-26")
+    if (targetItem.date && targetItem.date !== "-") {
+        document.getElementById("editDate").value = targetItem.date.replace(/\//g, "-");
+    } else {
+        document.getElementById("editDate").value = "";
+    }
+
+    document.getElementById("editLocation").value = targetItem.location || "";
+    document.getElementById("editWall").value = targetItem.wall || "";
+    document.getElementById("editStyle").value = targetItem.style || "";
+    document.getElementById("editResult").value = targetItem.result || "";
+    document.getElementById("editMemo").value = targetItem.memo || "";
+
+    // グレードの初期マッピングとトグルの自動連動判定
+    const currentGrade = targetItem.grade || "";
+    document.getElementById("editGrade").value = currentGrade;
+
+    const modalToggle = document.getElementById("modalGradeSystemToggle");
+    if (modalToggle) {
+        if (currentGrade.startsWith("V")) {
+            modalToggle.checked = true;
+            document.getElementById("editGradeV").value = currentGrade;
+            document.getElementById("editGradeJp").value = "";
+        } else {
+            modalToggle.checked = false;
+            document.getElementById("editGradeJp").value = currentGrade;
+            document.getElementById("editGradeV").value = "";
+        }
+        switchModalGradeSystem();
+    }
+
+    // 画面ソース（ジム P001 / 外岩 P002）により文言の動的クリーンアップ
+    const isGym = targetItem.input_source === "P001";
+    document.getElementById("editLocationLabel").textContent = isGym ? "店舗名" : "岩場名・地域";
+    document.getElementById("editWallLabel").textContent = isGym ? "壁名・テープ" : "課題名";
+
+    // メッセージ初期化、ボタン活性化
+    document.getElementById("editMessage").textContent = "";
+    document.getElementById("editMessage").style.color = "initial";
+    document.getElementById("editSubmitBtn").disabled = false;
+
+    // モーダルの可視化
+    const modal = document.getElementById("editModal");
+    if (modal) modal.classList.remove("hidden");
+    document.body.classList.add("modal-open");
+}
+
+/**
+ * モーダル専用初期イベント定義
+ */
+document.addEventListener("DOMContentLoaded", function () {
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modal = document.getElementById("editModal");
+    const editForm = document.getElementById("editForm");
+
+    if (closeModalBtn && modal) {
+        // 閉じる処理の共通化
+        const closeModal = function() { 
+            modal.classList.add("hidden"); 
+            document.body.classList.remove("modal-open"); 
+        };
+        
+        closeModalBtn.addEventListener("click", closeModal);
+        
+        // 背景の黒い部分をクリック時
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+
+    if (editForm) {
+        editForm.addEventListener("submit", executeDataUpdate);
+    }
+});
+
+/**
+ * GASのWebAPIへ編集データをPOST送信する（安全なシリアライズ順序へ修正）
+ */
+function executeDataUpdate(event) {
+    event.preventDefault();
+
+    const gasUrl = document.getElementById("gasEndpoint").value;
+    const msgDiv = document.getElementById("editMessage");
+    const submitBtn = document.getElementById("editSubmitBtn");
+    const modal = document.getElementById("editModal");
+
+    // 先にFormDataを生成して、すべてのinput(hidden含む)の値を確実にキャッチする
+    const form = document.getElementById("editForm");
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+
+    // 確実にデータが吸い上がった後にボタンを非活性化
+    msgDiv.textContent = "更新中...";
+    msgDiv.style.color = "var(--primary, #0ea5e9)";
+    submitBtn.disabled = true;
+
+    // POST用にデータを成形
+    formData.forEach((value, key) => {
+        params.append(key, value);
+    });
+    
+    // メソッド特定用のカスタムパラメータ（GAS側のdoPost内の分岐スイッチ用）
+    params.append("action", "update");
+
+    fetch(gasUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    })
+    .then(() => {
+        msgDiv.textContent = "更新が成功しました！";
+        msgDiv.style.color = "var(--success, #10b981)";
+
+        // ローカルキャッシュ(window.cachedClimbingData)の書き換え
+        const updatedNo = document.getElementById("editNo").value;
+        const targetIndex = window.cachedClimbingData.findIndex(item => String(item.no) === String(updatedNo));
+        
+        if (targetIndex !== -1) {
+            // 入力フォームから日付を取得し、表示用フォーマット("2026-05-26" -> "2026/05/26")へ再変換
+            const rawDate = document.getElementById("editDate").value;
+            window.cachedClimbingData[targetIndex].date = rawDate ? rawDate.replace(/-/g, "/") : "-";
+            window.cachedClimbingData[targetIndex].location = document.getElementById("editLocation").value;
+            window.cachedClimbingData[targetIndex].wall = document.getElementById("editWall").value;
+            window.cachedClimbingData[targetIndex].grade = document.getElementById("editGrade").value;
+            window.cachedClimbingData[targetIndex].style = document.getElementById("editStyle").value;
+            window.cachedClimbingData[targetIndex].result = document.getElementById("editResult").value;
+            window.cachedClimbingData[targetIndex].memo = document.getElementById("editMemo").value;
+        }
+
+        // 1秒後にモーダルを閉じ、タイムラインを最新キャッシュに基づき再描画
+        setTimeout(() => {
+            if (modal) modal.classList.add("hidden");
+            document.body.classList.remove("modal-open");
+            
+            const timelineContainer = document.getElementById("timelineContainer");
+            if (timelineContainer) {
+                // 現在アクティブなタブの状態を引き継いで再描写
+                const activeTab = document.querySelector(".tab-btn[style*='var(--primary)']");
+                const currentType = activeTab ? activeTab.id.replace("tab-", "") : "all";
+                filterTimeline(currentType);
+            }
+        }, 1000);
+    })
+    .catch(error => {
+        console.error("Update Error:", error);
+        msgDiv.textContent = "通信エラーが発生しました。";
+        msgDiv.style.color = "var(--error, #ef4444)";
+        submitBtn.disabled = false;
+    });
 }

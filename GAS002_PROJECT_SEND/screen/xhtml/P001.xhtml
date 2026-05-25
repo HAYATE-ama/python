@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PROJECT: SEND</title>
   <link rel="stylesheet" type="text/css" href="../common/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-transitional" />
@@ -13,6 +16,7 @@
 
   <link rel="apple-touch-icon" href="../img/icon.jpg" />
 </head>
+
 <body>
   <div id="wrapper">
     <div class="screen-id">SCREEN ID: P001</div>
@@ -113,11 +117,17 @@
     </div>
   </div>
   <div class="global-nav">
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P000')">ホーム</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">ジム記録</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">外岩記録</button>
-    <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">履歴</button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">
+      <i class="fa-solid fa-dumbbell"></i><span>ジム登録</span>
+    </button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">
+      <i class="fa-solid fa-mountain"></i><span>外岩登録</span>
+    </button>
+    <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">
+      <i class="fa-solid fa-clock-rotate-left"></i><span>履歴一覧</span>
+    </button>
   </div>
   <script type="text/javascript" src="../common/climbingCore.js"></script>
 </body>
+
 </html>

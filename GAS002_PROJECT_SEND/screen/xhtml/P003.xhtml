@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,21 +9,22 @@
     <link rel="stylesheet" type="text/css" href="../common/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
+
 <body>
 
     <div id="wrapper">
         <h1>Climbing Timeline</h1>
         <div class="screen-subtitle">ジム・外岩の一元化アクティビティ履歴</div>
 
-        <div class="tab-container" style="display: flex; gap: 8px; margin: 16px 0;">
-            <button type="button" id="tab-all" class="tab-btn" onclick="filterTimeline('all')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--primary); color: var(--primary); background: transparent;">
-                <i class="fa-solid fa-list" style="margin-right: 4px;"></i>すべて
+        <div class="timeline-tabs">
+            <button type="button" id="tab-all" class="tab-btn tab-btn-active" onclick="filterTimeline('all')">
+                <i class="fa-solid fa-list tab-icon"></i>すべて
             </button>
-            <button type="button" id="tab-gym" class="tab-btn" onclick="filterTimeline('gym')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--border); color: var(--text-muted); background: transparent;">
-                <i class="fa-solid fa-dumbbell" style="margin-right: 4px;"></i>ジム
+            <button type="button" id="tab-gym" class="tab-btn tab-btn-inactive" onclick="filterTimeline('gym')">
+                <i class="fa-solid fa-dumbbell tab-icon"></i>ジム
             </button>
-            <button type="button" id="tab-rock" class="tab-btn" onclick="filterTimeline('rock')" style="flex: 1; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; border: 1px solid var(--border); color: var(--text-muted); background: transparent;">
-                <i class="fa-solid fa-mountain" style="margin-right: 4px;"></i>外岩
+            <button type="button" id="tab-rock" class="tab-btn tab-btn-inactive" onclick="filterTimeline('rock')">
+                <i class="fa-solid fa-mountain tab-icon"></i>外岩
             </button>
         </div>
 
@@ -46,8 +48,105 @@
         </button>
     </div>
 
-    <input type="hidden" id="gasEndpoint" value="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec" />
+    <input type="hidden" id="gasEndpoint"
+        value="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec" />
 
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square"></i> 履歴の編集 (No.<span id="editNoTxt">-</span>)</h3>
+                <button type="button" id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            <form id="editForm" action="#">
+                <div>
+                    <input type="hidden" id="editNo" name="no" />
+                    <input type="hidden" id="editSource" name="input_source" />
+                </div>
+
+                <div class="form-group">
+                    <label for="editDate">日付</label>
+                    <input type="date" id="editDate" name="date" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <label id="editLocationLabel" for="editLocation">場所</label>
+                    <input type="text" id="editLocation" name="location" required="required" />
+                </div>
+                
+                <div class="form-group">
+                    <label id="editWallLabel" for="editWall">ターゲット</label>
+                    <input type="text" id="editWall" name="wall" required="required" />
+                </div>
+
+                <div class="form-group">
+                    <div class="grade-header">
+                        <label id="editGradeLabel">グレード</label>
+                        <div class="toggle-container">
+                            <span id="modal-toggle-label-jp" class="toggle-label active">JPN</span>
+                            <label class="switch">
+                                <input type="checkbox" id="modalGradeSystemToggle" onchange="switchModalGradeSystem()" />
+                                <span class="slider round"></span>
+                            </label>
+                            <span id="modal-toggle-label-v" class="toggle-label">V-Grading</span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="editGrade" name="grade" />
+
+                    <select id="editGradeJp" onchange="syncModalGradeValue(this)">
+                        <option value="">-- 選択してください --</option>
+                        <option value="8級">8級</option>
+                        <option value="7級">7級</option>
+                        <option value="6級">6級</option>
+                        <option value="5級">5級</option>
+                        <option value="4級">4級</option>
+                        <option value="3級">3級</option>
+                        <option value="2級">2級</option>
+                        <option value="1級">1級</option>
+                        <option value="初段">初段</option>
+                        <option value="二段">二段</option>
+                        <option value="三段以上">三段以上</option>
+                    </select>
+
+                    <select id="editGradeV" class="hidden" onchange="syncModalGradeValue(this)">
+                        <option value="">-- 選択してください --</option>
+                        <option value="V0">V0 (6級/5級)</option>
+                        <option value="V1">V1 (5級)</option>
+                        <option value="V2">V2 (4級)</option>
+                        <option value="V3">V3 (3級)</option>
+                        <option value="V4">V4 (3級/2級)</option>
+                        <option value="V5">V5 (2級)</option>
+                        <option value="V6">V6 (1級)</option>
+                        <option value="V7">V7 (1級/初段)</option>
+                        <option value="V8">V8 (初段)</option>
+                        <option value="V9">V9 (二段)</option>
+                        <option value="V10以上">V10以上</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editStyle">スタイル</label>
+                    <input type="text" id="editStyle" name="style" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="editResult">結果</label>
+                    <input type="text" id="editResult" name="result" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="editMemo">備考（特記事項・反省）</label>
+                    <textarea id="editMemo" name="memo" rows="3" cols="40"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <div id="editMessage"></div>
+                    <button type="submit" id="editSubmitBtn" class="btn-submit">更新する</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script type="text/javascript" src="../common/climbingCore.js"></script>
 </body>
+
 </html>

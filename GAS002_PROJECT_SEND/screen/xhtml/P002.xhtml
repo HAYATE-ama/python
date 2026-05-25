@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>クライミング記録 - 外岩用 (P002)</title>
   <link rel="stylesheet" type="text/css" href="../common/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-transitional" />
@@ -154,10 +155,15 @@
   </div>
 
   <div class="global-nav">
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P000')">ホーム</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">ジム記録</button>
-    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">外岩記録</button>
-    <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">履歴</button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P001')">
+      <i class="fa-solid fa-dumbbell"></i><span>ジム登録</span>
+    </button>
+    <button type="button" class="nav-item" onclick="RouteSelector.moveTo('P002')">
+      <i class="fa-solid fa-mountain"></i><span>外岩登録</span>
+    </button>
+    <button type="button" class="nav-item active" onclick="RouteSelector.moveTo('P003')">
+      <i class="fa-solid fa-clock-rotate-left"></i><span>履歴一覧</span>
+    </button>
   </div>
 
   <script type="text/javascript" src="../common/climbingCore.js"></script>

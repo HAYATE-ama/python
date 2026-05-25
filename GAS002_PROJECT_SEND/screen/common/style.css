@@ -111,7 +111,9 @@ textarea {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
@@ -124,6 +126,7 @@ input:focus, select:focus, textarea:focus {
   gap: 16px;
   margin-bottom: 24px;
 }
+
 .form-grid .form-group {
   margin-bottom: 0;
 }
@@ -155,9 +158,7 @@ input:focus, select:focus, textarea:focus {
   transform: scale(0.98);
 }
 
-/* =========================================================================
-   グレード切り替えトグルUI（P001 / P002 共通）
-   ========================================================================= */
+/* グード切り替えトグルUI（P001 / P002 共通） */
 .grade-header {
   display: flex;
   justify-content: space-between;
@@ -189,11 +190,10 @@ input:focus, select:focus, textarea:focus {
   font-weight: bold;
 }
 
-
 .switch {
   position: relative;
-  display: inline-flex; 
-  align-items: center; 
+  display: inline-flex;
+  align-items: center;
   width: 36px;
   height: 20px;
 }
@@ -204,33 +204,33 @@ input:focus, select:focus, textarea:focus {
   height: 0;
 }
 
-
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: var(--bg-input);
   transition: .3s;
 }
 
-
 .slider:before {
   position: absolute;
   content: "";
-  height: 14px; 
+  height: 14px;
   width: 14px;
-  left: 3px; 
-  top: 3px; 
+  left: 3px;
+  top: 3px;
   background-color: white;
   transition: .3s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: var(--primary);
 }
 
-
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(16px);
 }
 
@@ -281,7 +281,8 @@ input:checked + .slider:before {
   transition: color 0.2s;
 }
 
-.nav-item:hover, .nav-item.active {
+.nav-item:hover,
+.nav-item.active {
   color: var(--primary);
 }
 
@@ -293,12 +294,57 @@ input:checked + .slider:before {
   text-align: center;
   font-size: 0.9rem;
 }
-#message.success { background-color: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
-#message.error { background-color: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid var(--error); }
+
+#message.success {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+#message.error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
 
 /* =========================================================================
    7. 履歴画面（P003）専用：タイムライン＆カード型UIスタイル
    ========================================================================= */
+
+/* タイムライン上部：タブボタンコンテナ（強制横並び化） */
+.timeline-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 24px !important;
+  width: 100% !important;
+}
+
+.tab-btn {
+  flex: 1 !important;
+  padding: 10px 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap !important;
+}
+
+.tab-btn:hover {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
 
 /* ステータスメッセージ表示 */
 .status-message {
@@ -307,6 +353,7 @@ input:checked + .slider:before {
   color: var(--text-muted);
   font-size: 0.95rem;
 }
+
 .status-message i {
   margin-bottom: 12px;
   color: var(--primary);
@@ -322,7 +369,7 @@ input:checked + .slider:before {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background-color: rgba(15, 23, 42, 0.9); /* ボディーの背景色に合わせた半透明 */
+  background-color: rgba(15, 23, 42, 0.9);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   padding: 10px 4px;
@@ -334,6 +381,7 @@ input:checked + .slider:before {
   margin-bottom: 16px;
   display: block;
 }
+
 .session-date-header i {
   margin-right: 8px;
 }
@@ -356,15 +404,18 @@ input:checked + .slider:before {
   align-items: center;
   margin-bottom: 8px;
 }
+
 .card-location {
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-muted);
 }
+
 .card-location i {
   margin-right: 6px;
   color: var(--border);
 }
+
 .card-grade {
   font-size: 1rem;
   font-weight: 700;
@@ -375,6 +426,7 @@ input:checked + .slider:before {
 .card-body-row {
   margin-bottom: 14px;
 }
+
 .card-target-name {
   font-size: 1.15rem;
   font-weight: 600;
@@ -399,21 +451,25 @@ input:checked + .slider:before {
   font-weight: 700;
   letter-spacing: 0.05em;
 }
+
 .badge-flash {
   background-color: rgba(16, 185, 129, 0.15);
   color: var(--success);
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
+
 .badge-rp {
   background-color: rgba(14, 165, 233, 0.15);
   color: var(--primary);
   border: 1px solid rgba(14, 165, 233, 0.3);
 }
+
 .badge-atm {
   background-color: rgba(245, 158, 11, 0.15);
   color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
+
 .badge-default {
   background-color: rgba(148, 163, 184, 0.15);
   color: var(--text-muted);
@@ -424,12 +480,13 @@ input:checked + .slider:before {
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+
 .card-style-info i {
   margin-right: 4px;
   color: var(--border);
 }
 
-/* カード最下段：ネストされたメモ欄 */
+/* カード最下段：メモ欄 */
 .card-memo-box {
   background-color: var(--bg-main);
   border-radius: var(--radius-md);
@@ -442,13 +499,185 @@ input:checked + .slider:before {
   word-break: break-all;
   border-left: 3px solid var(--border);
 }
+
 .card-memo-box i {
   margin-right: 6px;
   color: var(--border);
 }
 
-/* グローバルナビ内の文字位置微調整用 */
 .global-nav .nav-item i {
   font-size: 1.2rem;
   margin-bottom: 3px;
+}
+
+/* =========================================================================
+   8. 履歴編集モーダル（P003追加分）ハイエンド・モダン最適化
+   ========================================================================= */
+
+/* モーダル背景（オーバーレイ） */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.85) !important; 
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(180%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  overflow-y: auto;
+}
+
+/* ダイアログ本体（白飛びを完全防止したダークグラス） */
+.modal-content {
+  background: #1e293b !important; 
+  color: #f8fafc !important;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  width: 92%;
+  max-width: 480px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+  animation: modalSpringUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin: auto;
+}
+
+@keyframes modalSpringUp {
+  from {
+    transform: scale(0.95) translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff !important;
+}
+
+.modal-header h3 i {
+  color: var(--primary);
+  margin-right: 8px;
+}
+
+.modal-header h3 span {
+  font-family: 'JetBrains Mono', Fira Code, monospace;
+  font-size: 0.9rem;
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 8px;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.2);
+  transform: rotate(90deg);
+}
+
+.modal-content .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-content .form-group label {
+  font-size: 0.85rem;
+  color: var(--text-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* インプットおよびセレクトボックスの埋め込み調ダーク化 */
+.modal-content input[type="date"],
+.modal-content input[type="text"],
+.modal-content select,
+.modal-content textarea {
+  background-color: #0f172a !important; 
+  border: 1px solid #475569 !important;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  color: #f8fafc !important;
+}
+
+.modal-content input:focus, 
+.modal-content select:focus, 
+.modal-content textarea:focus {
+  border-color: var(--primary);
+  background-color: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 1px var(--primary), 0 0 20px rgba(14, 165, 233, 0.15);
+}
+
+.modal-content select option {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.modal-footer {
+  margin-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#editMessage {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.modal-content .btn-submit {
+  width: auto;
+  min-width: 130px;
+  padding: 12px 28px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+  transition: all 0.2s ease;
+}
+
+body.modal-open {
+  overflow: hidden !important;
 }
