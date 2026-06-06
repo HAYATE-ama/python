@@ -131,6 +131,37 @@ textarea:focus {
   margin-bottom: 0;
 }
 
+/* モバイルでの崩れを防ぐための追加設定 */
+input[type="date"] {
+  -webkit-appearance: none; /* iOS特有の装飾を無効化 */
+  appearance: none;
+  width: 100%;
+  display: block;
+}
+
+/* iOSで日付欄の文字が小さくなるのを防ぐ */
+input[type="date"]::-webkit-datetime-edit {
+  padding: 0;
+}
+
+/* 日付選択アイコン（カレンダー）のクリック範囲を広げる（Android対応） */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 8px; /* タップしやすくする */
+  margin-right: -8px; /* 右端を揃える */
+}
+
+@media (max-width: 480px) {
+  #wrapper {
+    padding: 0 15px; /* スマホでは少し余白を詰める */
+    margin: 20px auto;
+  }
+  
+  .main-card {
+    padding: 20px; /* カード内部の余白もスマホ用に最適化 */
+  }
+}
+
 /* =========================================================================
    5. 共通コンポーネント（ボタン・トグル・UI）
    ========================================================================= */
