@@ -257,6 +257,9 @@ input:checked+.slider:before {
 /* =========================================================================
    6. グローバル下部ナビゲーションバー（RouteSelector連動）
    ========================================================================= */
+/* =========================================================================
+   6. グローバル下部ナビゲーションバー（修正版）
+   ========================================================================= */
 .global-nav {
   position: fixed;
   bottom: 0;
@@ -276,22 +279,33 @@ input:checked+.slider:before {
   background: none;
   border: none;
   color: var(--text-muted);
+  /* 通常時はグレー */
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 33.33%;
-  height: 100%;
   justify-content: center;
+  width: 100%;
+  height: 100%;
   transition: color 0.2s;
 }
 
-.nav-item:hover,
+.nav-item i {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* JSで付与された active クラスがある場合のみ青くする */
 .nav-item.active {
-  color: var(--primary);
+  color: var(--primary) !important;
+}
+
+.nav-item.active i {
+  color: var(--primary) !important;
 }
 
 /* メッセージエリア */

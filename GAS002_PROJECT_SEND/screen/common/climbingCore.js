@@ -17,13 +17,33 @@ window.cachedClimbingData = [];
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    // ─── 【重要】現在地のナビゲーション自動判定・付与 ───
+    const path = window.location.pathname;
+    const navMap = [
+        { id: 'nav-P001', key: 'P001' },
+        { id: 'nav-P002', key: 'P002' },
+        { id: 'nav-P003', key: 'P003' }
+    ];
+
+    navMap.forEach(item => {
+        const btn = document.getElementById(item.id);
+        if (btn) {
+            // パスに該当するキーが含まれていれば active を付与
+            if (path.includes(item.key)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+    });
+
     // ─── フォーム画面用（P001 / P002）の初期化 ───
     const form = document.getElementById("climbingForm");
     if (form) {
         form.addEventListener("submit", submitClimbingForm);
     }
 
-    // デートピッカー制御（枠内のどこをクリックしてもカレンダーを強制展開）
+    // デートピッカー強制展開処理
     const dateInputs = document.querySelectorAll('input[type="date"]');
     dateInputs.forEach(function (input) {
         input.addEventListener('click', function () {
@@ -33,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ─── 履歴画面用（P003）の初期化とデータロード処理 ───
+    // ─── 履歴画面用（P003）の初期化 ───
     const timelineContainer = document.getElementById("timelineContainer");
     if (timelineContainer) {
         const gasEndpointInput = document.getElementById("gasEndpoint");
@@ -44,28 +64,24 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // GASから一元化データを取得（GETリクエスト）
         fetch(gasEndpointInput.value)
             .then(response => {
-                if (!response.ok) throw new Error("ネットワーク応答が正常ではありません。");
+                if (!response.ok) throw new Error("ネットワーク応答エラー");
                 return response.json();
             })
             .then(res => {
                 if (res.status === "success" && Array.isArray(res.data)) {
                     if (statusMessage) statusMessage.classList.add("hidden");
-
                     window.cachedClimbingData = res.data;
-
-                    // 初期表示は「すべて」を表示
                     renderCardTimeline(window.cachedClimbingData, timelineContainer);
                     timelineContainer.classList.remove("hidden");
                 } else {
-                    throw new Error(res.message || "データの取得に失敗しました。");
+                    throw new Error(res.message || "データ取得失敗");
                 }
             })
             .catch(error => {
                 console.error("Fetch Error:", error);
-                showError("履歴データの読み込みに失敗しました。ローカルサーバー(Live Server等)で実行しているか確認してください。");
+                showError("履歴データの読み込みに失敗しました。");
             });
 
         function showError(message) {
@@ -452,13 +468,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (closeModalBtn && modal) {
         // 閉じる処理の共通化
-        const closeModal = function() { 
-            modal.classList.add("hidden"); 
-            document.body.classList.remove("modal-open"); 
+        const closeModal = function () {
+            modal.classList.add("hidden");
+            document.body.classList.remove("modal-open");
         };
-        
+
         closeModalBtn.addEventListener("click", closeModal);
-        
+
         // 背景の黒い部分をクリック時
         modal.addEventListener("click", (e) => {
             if (e.target === modal) {
@@ -497,7 +513,7 @@ function executeDataUpdate(event) {
     formData.forEach((value, key) => {
         params.append(key, value);
     });
-    
+
     // メソッド特定用のカスタムパラメータ（GAS側のdoPost内の分岐スイッチ用）
     params.append("action", "update");
 
@@ -509,44 +525,44 @@ function executeDataUpdate(event) {
         },
         body: params.toString()
     })
-    .then(() => {
-        msgDiv.textContent = "更新が成功しました！";
-        msgDiv.style.color = "var(--success, #10b981)";
+        .then(() => {
+            msgDiv.textContent = "更新が成功しました！";
+            msgDiv.style.color = "var(--success, #10b981)";
 
-        // ローカルキャッシュ(window.cachedClimbingData)の書き換え
-        const updatedNo = document.getElementById("editNo").value;
-        const targetIndex = window.cachedClimbingData.findIndex(item => String(item.no) === String(updatedNo));
-        
-        if (targetIndex !== -1) {
-            // 入力フォームから日付を取得し、表示用フォーマット("2026-05-26" -> "2026/05/26")へ再変換
-            const rawDate = document.getElementById("editDate").value;
-            window.cachedClimbingData[targetIndex].date = rawDate ? rawDate.replace(/-/g, "/") : "-";
-            window.cachedClimbingData[targetIndex].location = document.getElementById("editLocation").value;
-            window.cachedClimbingData[targetIndex].wall = document.getElementById("editWall").value;
-            window.cachedClimbingData[targetIndex].grade = document.getElementById("editGrade").value;
-            window.cachedClimbingData[targetIndex].style = document.getElementById("editStyle").value;
-            window.cachedClimbingData[targetIndex].result = document.getElementById("editResult").value;
-            window.cachedClimbingData[targetIndex].memo = document.getElementById("editMemo").value;
-        }
+            // ローカルキャッシュ(window.cachedClimbingData)の書き換え
+            const updatedNo = document.getElementById("editNo").value;
+            const targetIndex = window.cachedClimbingData.findIndex(item => String(item.no) === String(updatedNo));
 
-        // 1秒後にモーダルを閉じ、タイムラインを最新キャッシュに基づき再描画
-        setTimeout(() => {
-            if (modal) modal.classList.add("hidden");
-            document.body.classList.remove("modal-open");
-            
-            const timelineContainer = document.getElementById("timelineContainer");
-            if (timelineContainer) {
-                // 現在アクティブなタブの状態を引き継いで再描写
-                const activeTab = document.querySelector(".tab-btn[style*='var(--primary)']");
-                const currentType = activeTab ? activeTab.id.replace("tab-", "") : "all";
-                filterTimeline(currentType);
+            if (targetIndex !== -1) {
+                // 入力フォームから日付を取得し、表示用フォーマット("2026-05-26" -> "2026/05/26")へ再変換
+                const rawDate = document.getElementById("editDate").value;
+                window.cachedClimbingData[targetIndex].date = rawDate ? rawDate.replace(/-/g, "/") : "-";
+                window.cachedClimbingData[targetIndex].location = document.getElementById("editLocation").value;
+                window.cachedClimbingData[targetIndex].wall = document.getElementById("editWall").value;
+                window.cachedClimbingData[targetIndex].grade = document.getElementById("editGrade").value;
+                window.cachedClimbingData[targetIndex].style = document.getElementById("editStyle").value;
+                window.cachedClimbingData[targetIndex].result = document.getElementById("editResult").value;
+                window.cachedClimbingData[targetIndex].memo = document.getElementById("editMemo").value;
             }
-        }, 1000);
-    })
-    .catch(error => {
-        console.error("Update Error:", error);
-        msgDiv.textContent = "通信エラーが発生しました。";
-        msgDiv.style.color = "var(--error, #ef4444)";
-        submitBtn.disabled = false;
-    });
+
+            // 1秒後にモーダルを閉じ、タイムラインを最新キャッシュに基づき再描画
+            setTimeout(() => {
+                if (modal) modal.classList.add("hidden");
+                document.body.classList.remove("modal-open");
+
+                const timelineContainer = document.getElementById("timelineContainer");
+                if (timelineContainer) {
+                    // 現在アクティブなタブの状態を引き継いで再描写
+                    const activeTab = document.querySelector(".tab-btn[style*='var(--primary)']");
+                    const currentType = activeTab ? activeTab.id.replace("tab-", "") : "all";
+                    filterTimeline(currentType);
+                }
+            }, 1000);
+        })
+        .catch(error => {
+            console.error("Update Error:", error);
+            msgDiv.textContent = "通信エラーが発生しました。";
+            msgDiv.style.color = "var(--error, #ef4444)";
+            submitBtn.disabled = false;
+        });
 }
