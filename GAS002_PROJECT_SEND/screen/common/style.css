@@ -4,19 +4,17 @@
    1. デザインシステム・トークン定義（CSS変数）
    ========================================================================= */
 :root {
-  /* カラーパレット */
-  --bg-main: #0f172a;       /* 深みのあるダークネイビー（モダンテック風） */
-  --bg-card: #1e293b;       /* カード・フォームの背景 */
-  --bg-input: #334155;      /* 入力フィールドの背景 */
-  --text-main: #f8fafc;     /* メインテキスト（ほぼ白） */
-  --text-muted: #94a3b8;    /* 補足テキスト（グレー） */
-  --primary: #0ea5e9;       /* アクセント：鮮やかなアクアブルー */
-  --primary-hover: #38bdf8; /* アクセントホバー */
-  --success: #10b981;       /* 完登・成功：エメラルドグリーン */
-  --error: #ef4444;         /* エラー・未解決：クリムゾンレッド */
-  --border: #475569;        /* ボーダー・線 */
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --bg-input: #334155;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --primary: #0ea5e9;
+  --primary-hover: #38bdf8;
+  --success: #10b981;
+  --error: #ef4444;
+  --border: #475569;
 
-  /* シャドウ・アール（角丸） */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -24,7 +22,6 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
 
-  /* タイポグラフィ */
   --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -43,7 +40,7 @@ body {
   font-family: var(--font-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  padding-bottom: 60px; /* ナビゲーションバー用の余白 */
+  padding-bottom: 60px;
 }
 
 /* =========================================================================
@@ -70,7 +67,6 @@ h1 {
   margin-bottom: 32px;
 }
 
-/* カード型コンテナ（HOME、P001、P002共通） */
 .main-card {
   background-color: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -94,13 +90,13 @@ h1 {
   color: var(--text-main);
 }
 
-/* 入力エリア（input, select, textarea一律最適化） */
 input[type="date"],
 input[type="text"],
 input[type="number"],
 select,
 textarea {
   width: 100%;
+  display: block;
   padding: 12px 16px;
   background-color: var(--bg-input);
   border: 1px solid var(--border);
@@ -111,6 +107,19 @@ textarea {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* 日付入力欄のOS依存の装飾をリセットし、幅を正確に合わせる */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 日付アイコンの右端ズレを修正 */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 8px;
+  margin-right: -8px;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -119,46 +128,13 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
 }
 
-/* 横並びグリッドレイアウト（例：天気・気温・湿度、壁・スタイルなど） */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.form-grid .form-group {
-  margin-bottom: 0;
-}
-
-/* モバイルでの崩れを防ぐための追加設定 */
-input[type="date"] {
-  -webkit-appearance: none; /* iOS特有の装飾を無効化 */
-  appearance: none;
-  width: 100%;
-  display: block;
-}
-
-/* iOSで日付欄の文字が小さくなるのを防ぐ */
-input[type="date"]::-webkit-datetime-edit {
-  padding: 0;
-}
-
-/* 日付選択アイコン（カレンダー）のクリック範囲を広げる（Android対応） */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  padding: 8px; /* タップしやすくする */
-  margin-right: -8px; /* 右端を揃える */
-}
-
 @media (max-width: 480px) {
   #wrapper {
-    padding: 0 15px; /* スマホでは少し余白を詰める */
+    padding: 0 15px;
     margin: 20px auto;
   }
-  
   .main-card {
-    padding: 20px; /* カード内部の余白もスマホ用に最適化 */
+    padding: 20px;
   }
 }
 
@@ -166,7 +142,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
    5. 共通コンポーネント（ボタン・トグル・UI）
    ========================================================================= */
 
-/* メイン送信ボタン */
 .btn-submit {
   width: 100%;
   padding: 14px;
