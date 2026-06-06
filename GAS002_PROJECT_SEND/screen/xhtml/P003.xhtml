@@ -13,6 +13,7 @@
 <body>
 
     <div id="wrapper">
+        <div class="screen-id">SCREEN ID: P003</div>
         <h1>Climbing Timeline</h1>
         <div class="screen-subtitle">ジム・外岩の一元化アクティビティ履歴</div>
 
@@ -72,7 +73,7 @@
                     <label id="editLocationLabel" for="editLocation">場所</label>
                     <input type="text" id="editLocation" name="location" required="required" />
                 </div>
-                
+
                 <div class="form-group">
                     <label id="editWallLabel" for="editWall">ターゲット</label>
                     <input type="text" id="editWall" name="wall" required="required" />
@@ -84,7 +85,8 @@
                         <div class="toggle-container">
                             <span id="modal-toggle-label-jp" class="toggle-label active">JPN</span>
                             <label class="switch">
-                                <input type="checkbox" id="modalGradeSystemToggle" onchange="switchModalGradeSystem()" />
+                                <input type="checkbox" id="modalGradeSystemToggle"
+                                    onchange="switchModalGradeSystem()" />
                                 <span class="slider round"></span>
                             </label>
                             <span id="modal-toggle-label-v" class="toggle-label">V-Grading</span>
@@ -128,12 +130,12 @@
                     <label for="editStyle">スタイル</label>
                     <input type="text" id="editStyle" name="style" />
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editResult">結果</label>
                     <input type="text" id="editResult" name="result" />
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editMemo">備考（特記事項・反省）</label>
                     <textarea id="editMemo" name="memo" rows="3" cols="40"></textarea>
