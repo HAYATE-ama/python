@@ -20,7 +20,13 @@
 <body>
 
   <div id="wrapper">
-    <div class="screen-id">SCREEN ID: P002</div>
+    <header class="page-header"
+      style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+      <button type="button" class="btn-back" onclick="RouteSelector.moveTo('P000')">
+        <i class="fa-solid fa-arrow-left"></i> 戻る
+      </button>
+      <span class="screen-id">SCREEN ID: P002</span>
+    </header>
 
     <h1>外岩用 課題記録</h1>
     <div class="screen-subtitle">アウトドアロッククライミング</div>
@@ -163,6 +169,9 @@
     </button>
     <button type="button" class="nav-item" id="nav-P003" onclick="RouteSelector.moveTo('P003')">
       <i class="fa-solid fa-clock-rotate-left"></i><span>履歴一覧</span>
+    </button>
+    <button type="button" class="nav-item" id="nav-P005" onclick="RouteSelector.moveTo('P005')">
+      <i class="fa-solid fa-user-gear"></i><span>設定</span>
     </button>
   </div>
 

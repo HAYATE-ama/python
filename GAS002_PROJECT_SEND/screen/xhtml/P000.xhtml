@@ -17,7 +17,11 @@
 
 <body>
     <div id="wrapper">
-        <h1>クライミング記録管理システム</h1>
+        <header class="page-header"
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <span class="screen-id">SCREEN ID: P000</span>
+        </header>
+        <h1>ホーム画面</h1>
         <div class="screen-subtitle">ダッシュボードメニュー</div>
         <div class="main-card menu-container">
             <button type="button" class="btn-submit" style="margin-bottom: 16px;"
@@ -26,6 +30,10 @@
                 onclick="RouteSelector.moveTo('P002')">外岩記録</button>
             <button type="button" class="btn-submit" style="margin-bottom: 16px;"
                 onclick="RouteSelector.moveTo('P003')">記録一覧</button>
+            <!-- <button type="button" class="btn-submit" style="margin-bottom: 16px;"
+                onclick="RouteSelector.moveTo('P004')">筋トレ記録</button> -->
+            <button type="button" class="btn-submit" style="margin-bottom: 16px;"
+                onclick="RouteSelector.moveTo('P005')">個人設定</button>
         </div>
     </div>
     <script type="text/javascript" src="../common/climbingCore.js"></script>

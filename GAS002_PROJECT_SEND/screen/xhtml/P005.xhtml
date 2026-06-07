@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PROJECT: SEND - プロフィール設定</title>
+    <link rel="stylesheet" type="text/css" href="../common/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+    <div id="wrapper">
+        <header class="page-header"
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <button type="button" class="btn-back" onclick="RouteSelector.moveTo('P000')">
+                <i class="fa-solid fa-arrow-left"></i> 戻る
+            </button>
+            <span class="screen-id">SCREEN ID: P005</span>
+        </header>
+
+        <h1>プロフィール設定</h1>
+        <div class="main-card">
+            <form id="profileForm"
+                data-url="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec"
+                data-msg="プロフィールを更新しました！">
+                <div class="form-group">
+                    <label class="section-label">身体・能力データ</label>
+
+                    <div class="input-inline">
+                        <label>身長</label>
+                        <input type="text" name="height" />
+                        <span>cm</span>
+                    </div>
+
+                    <div class="input-inline">
+                        <label>体重</label>
+                        <input type="text" name="weight" />
+                        <span>kg</span>
+                    </div>
+
+                    <div class="input-inline">
+                        <label>リーチ</label>
+                        <input type="text" name="reach" />
+                        <span>cm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>苦手なムーブ・技術</label>
+                    <textarea name="weakness" rows="3" placeholder="カチ保持、スローパーの足置き..."></textarea>
+                </div>
+
+                <input type="hidden" name="gymDays" id="gymDays" />
+                <div class="form-group">
+                    <label>ジムに通う曜日</label>
+                    <div class="day-selector">
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">月</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">火</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">水</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">木</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">金</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">土</button>
+                        <button type="button" class="day-btn" onclick="this.classList.toggle('active')">日</button>
+                    </div>
+                </div>
+
+                <label>自宅トレーニング頻度</label>
+                <select name="homeTrainFrequency" style="width: 100%; padding: 8px;">
+                    <option value="なし">なし</option>
+                    <option value="週1-2回">週1-2回</option>
+                    <option value="週3-4回">週3-4回</option>
+                    <option value="ほぼ毎日">ほぼ毎日</option>
+                </select>
+
+                <button type="submit" class="btn-submit">プロフィールを保存</button>
+                <div id="message"></div>
+            </form>
+        </div>
+    </div>
+    <div class="global-nav">
+        <button type="button" class="nav-item" id="nav-P001" onclick="RouteSelector.moveTo('P001')">
+            <i class="fa-solid fa-dumbbell"></i><span>ジム登録</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P002" onclick="RouteSelector.moveTo('P002')">
+            <i class="fa-solid fa-mountain"></i><span>外岩登録</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P003" onclick="RouteSelector.moveTo('P003')">
+            <i class="fa-solid fa-clock-rotate-left"></i><span>履歴一覧</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P005" onclick="RouteSelector.moveTo('P005')">
+            <i class="fa-solid fa-user-gear"></i><span>設定</span>
+        </button>
+    </div>
+    <script type="text/javascript" src="../common/climbingCore.js"></script>
+
+</body>
+
+</html>

@@ -704,3 +704,120 @@ input:checked+.slider:before {
 body.modal-open {
   overflow: hidden !important;
 }
+
+/* =========================================================================
+   9. プロフィール設定（P005）最適化スタイル
+   ========================================================================= */
+
+/* ラベル・レイアウト調整 */
+.section-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#profileForm .form-group {
+    margin-bottom: 24px !important;
+}
+
+/* 身体データ等：インラインレイアウト */
+.input-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.input-inline label {
+    width: 60px;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 0 !important;
+}
+
+.input-inline input {
+    flex: 1;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: white;
+}
+
+.input-inline span {
+    width: 30px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* セレクトボックス（自宅トレーニング頻度） */
+select[name="homeTrainFrequency"] {
+    height: 48px;
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-size: 1rem;
+    padding: 0 16px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+/* チップと曜日ボタン */
+.chip-container,
+.day-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chip,
+.day-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.chip.active,
+.day-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* ヘッダー・戻るボタン・ID表示 */
+.btn-back {
+    background: transparent !important;
+    border: 1px solid #444 !important;
+    color: #ccc !important;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background: #333 !important;
+    color: #fff;
+}
+
+.screen-id {
+    font-size: 0.75rem;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.btn-submit {
+    margin-top: 10px;
+}

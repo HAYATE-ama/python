@@ -16,26 +16,8 @@ window.RouteSelector = {
 window.cachedClimbingData = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    // ─── 【重要】現在地のナビゲーション自動判定・付与 ───
-    const path = window.location.pathname;
-    const navMap = [
-        { id: 'nav-P001', key: 'P001' },
-        { id: 'nav-P002', key: 'P002' },
-        { id: 'nav-P003', key: 'P003' }
-    ];
-
-    navMap.forEach(item => {
-        const btn = document.getElementById(item.id);
-        if (btn) {
-            // パスに該当するキーが含まれていれば active を付与
-            if (path.includes(item.key)) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        }
-    });
+    // --- 1.2 ナビゲーションのactiveクラス付与（挿入後に実行） ---
+    updateActiveNav();
 
     // ─── フォーム画面用（P001 / P002）の初期化 ───
     const form = document.getElementById("climbingForm");
@@ -90,7 +72,36 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
+
+    // --- 5. プロフィール画面 (P005) 初期化 ---
+    if (window.location.pathname.includes('P005')) {
+        initP005();
+    }
 });
+
+/**
+ * 現在地のナビゲーションボタンに active クラスを付与する関数
+ */
+function updateActiveNav() {
+    const path = window.location.pathname;
+    const navMap = [
+        { id: 'nav-P001', key: 'P001' },
+        { id: 'nav-P002', key: 'P002' },
+        { id: 'nav-P003', key: 'P003' },
+        { id: 'nav-P005', key: 'P005' }
+    ];
+
+    navMap.forEach(item => {
+        const btn = document.getElementById(item.id);
+        if (btn) {
+            if (path.includes(item.key)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+    });
+}
 
 // =========================================================================
 // 2. 履歴画面（P003）専用：カード型タイムライン描画 & フィルタロジック
@@ -170,7 +181,7 @@ function renderCardTimeline(dataList, targetContainer) {
             detailsHtml += `</div>`;
         }
 
-        const memoText = item.memo || "";
+        const memoText = String(item.memo || ""); // 文字列にキャスト
         if ((memoText && memoText.trim() !== "" && memoText !== "-") || detailsHtml !== "") {
             htmlBuffer += `    <div class="card-memo-box">`;
             if (memoText && memoText !== "-") {
@@ -329,7 +340,7 @@ function submitClimbingForm(event) {
 
     fetch(GAS_WEB_APP_URL, {
         method: "POST",
-        mode: "no-cors",
+        mode: "cors",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
@@ -519,7 +530,7 @@ function executeDataUpdate(event) {
 
     fetch(gasUrl, {
         method: "POST",
-        mode: "no-cors",
+        mode: "cors",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
@@ -566,3 +577,120 @@ function executeDataUpdate(event) {
             submitBtn.disabled = false;
         });
 }
+
+// P005用の初期化関数
+function initP005() {
+    const form = document.getElementById("profileForm");
+    if (!form) return;
+
+    // イベントリスナーを重複させないために一度removeする（念のため）
+    form.removeEventListener("submit", handleProfileSubmit);
+    form.addEventListener("submit", handleProfileSubmit);
+
+    // 1. データ読み込み
+    initProfile();
+}
+
+// 独立した関数として定義する
+function handleProfileSubmit(e) {
+    e.preventDefault();
+    saveProfile();
+}
+
+// 読み込み実行（エラーハンドリングを追加）
+function initProfile() {
+    const form = document.getElementById("profileForm");
+    const endpoint = form.getAttribute("data-url");
+
+    if (!endpoint) {
+        console.error("Endpoint URLが設定されていません");
+        return;
+    }
+
+    fetch(endpoint + "?type=profile")
+        .then(res => {
+            if (!res.ok) throw new Error("サーバー応答エラー");
+            return res.json();
+        })
+        .then(res => {
+            if (res.status === "success" && res.data) {
+                const d = res.data;
+                // 各入力項目へ値をセット
+                ['height', 'weight', 'reach', 'weakness'].forEach(f => {
+                    const el = form.querySelector(`[name="${f}"]`);
+                    if (el) el.value = d[f] || "";
+                });
+
+                const homeTrain = document.getElementById("homeTrain");
+                if (homeTrain) homeTrain.checked = (d.homeTrain === "あり");
+
+                // 曜日ボタンの活性状態復元
+                if (d.gymDays) {
+                    const activeDays = d.gymDays.split(',');
+                    document.querySelectorAll('.day-btn').forEach(btn => {
+                        if (activeDays.includes(btn.textContent)) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            console.error("プロフィール読み込みエラー:", err);
+            // ユーザーにアラートを出すか、UIにエラーを表示する処理
+        });
+}
+
+function saveProfile() {
+    const form = document.getElementById("profileForm");
+    const messageDiv = document.getElementById("message");
+
+    if (messageDiv) {
+        messageDiv.textContent = "保存中...";
+        messageDiv.className = ""; // クラスをリセット
+    }
+
+    const selectedDays = Array.from(document.querySelectorAll('.day-btn.active'))
+        .map(btn => btn.textContent).join(',');
+    document.getElementById("gymDays").value = selectedDays;
+
+    // const homeTrainEl = document.getElementById("homeTrain");
+    // const homeTrainVal = homeTrainEl.checked ? "あり" : "なし";
+
+    const params = new URLSearchParams(new FormData(form));
+    params.set("input_source", "P005");
+
+    fetch(form.getAttribute("data-url"), {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    })
+        .then(res => {
+            // 1. HTTPステータスが200-299以外ならエラー
+            if (!res.ok) throw new Error("サーバーレスポンスエラー: " + res.status);
+            return res.json(); // 2. JSONとしてパース
+        })
+        .then(data => {
+            if (data && data.status === 'success') {
+                if (messageDiv) {
+                    messageDiv.textContent = "プロフィールを更新しました！";
+                    messageDiv.className = "success"; // CSSで定義済みのスタイルを適用
+                }
+            } else {
+                throw new Error("更新失敗");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (messageDiv) {
+                messageDiv.textContent = "保存に失敗しました。";
+                messageDiv.className = "error";
+            }
+        });
+}
+
