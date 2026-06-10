@@ -8,6 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PROJECT: SEND</title>
   <link rel="stylesheet" type="text/css" href="../common/style.css" />
+  
+  <style>
+    /* 本数入力用のスタイル調整 */
+    .input-count {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -27,15 +40,18 @@
       <span class="screen-id">SCREEN ID: P001</span>
     </header>
     <h1>ジム用 課題記録</h1>
-    <div class="screen-subtitle">インドアボルダリングアクティビティ</div>
+    <div class="screen-subtitle">インドアボルダリング（トレーニングモード）</div>
+    
     <div class="main-card">
-      <form id="climbingForm" action="#"
+      <form id="climbingForm" action="#" onsubmit="prepareSubmitData()"
         data-url="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec"
         data-msg="ジムの記録を登録しました！">
+        
         <div class="form-group">
           <label for="date">日付</label>
           <input type="date" id="date" name="date" required="required" />
         </div>
+
         <div class="form-group">
           <label for="gym">ジム名</label>
           <select id="gym" name="gym" required="required">
@@ -47,17 +63,7 @@
             <option value="others">その他ホーム/遠征先</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="wall">壁（傾斜など）</label>
-          <select id="wall" name="wall">
-            <option value="スラブ">スラブ</option>
-            <option value="垂壁">垂壁</option>
-            <option value="薄かぶり（95〜110度）">薄かぶり（95〜110度）</option>
-            <option value="強傾斜（115〜130度）">強傾斜（115〜130度）</option>
-            <option value="ルーフ">ルーフ</option>
-            <option value="マントル/その他">マントル/その他</option>
-          </select>
-        </div>
+
         <div class="form-group">
           <div class="grade-header">
             <label>グレード</label>
@@ -99,47 +105,59 @@
           </select>
           <input type="hidden" id="grade" name="grade" required="required" />
         </div>
+
         <div class="form-group">
-          <label for="style">ホールド/スタイル</label>
-          <input type="text" id="style" name="style" placeholder="例: スローパー、ダイノ、ポケット、足限定" />
+          <label for="climbCount">本数</label>
+          <input type="number" id="climbCount" class="input-count" value="1" min="1" max="99" />
         </div>
+
         <div class="form-group">
-          <label for="result">結果</label>
-          <select id="result" name="result">
-            <option value="完登（Flash）">完登（Flash）</option>
-            <option value="完登（Redpoint）">完登（Redpoint）</option>
-            <option value="最高到達点（ワンムーブ残し）">最高到達点（ワンムーブ残し）</option>
-            <option value="バラし完了">バラし完了</option>
-            <option value="未解決（宿題）">未解決（宿題）</option>
-          </select>
+          <label for="displayMemo">メモ・反省</label>
+          <textarea id="displayMemo" rows="2" placeholder="（任意）意識したことなど。空欄でもOK"></textarea>
         </div>
-        <div class="form-group">
-          <label for="memo">メモ・反省</label>
-          <textarea id="memo" name="memo" rows="3" placeholder="例: 核心の右手はピンチ持ち、左足はスメア意識。"></textarea>
-        </div>
-        <button type="submit" class="btn-submit">記録する</button>
+
+
+        <input type="hidden" id="result" name="result" value="完登（Redpoint）" />
+        <input type="hidden" id="wall" name="wall" value="" />
+        <input type="hidden" id="style" name="style" value="" />
+        <input type="hidden" id="actualMemo" name="memo" />
+
+        <button type="submit" class="btn-submit" style="margin-top: 20px;">記録する</button>
       </form>
       <div id="message"></div>
     </div>
   </div>
-  <div class="global-nav">
-    <button type="button" class="nav-item" id="nav-P001" onclick="RouteSelector.moveTo('P001')">
-      <i class="fa-solid fa-dumbbell"></i><span>ジム</span>
-    </button>
-    <button type="button" class="nav-item" id="nav-P002" onclick="RouteSelector.moveTo('P002')">
-      <i class="fa-solid fa-mountain"></i><span>外岩</span>
-    </button>
-    <button type="button" class="nav-item" id="nav-P004" onclick="RouteSelector.moveTo('P004')">
-      <i class="fa-solid fa-clipboard-list"></i><span>メニュー</span>
-    </button>
-    <button type="button" class="nav-item" id="nav-P003" onclick="RouteSelector.moveTo('P003')">
-      <i class="fa-solid fa-clock-rotate-left"></i><span>履歴</span>
-    </button>
-    <button type="button" class="nav-item" id="nav-P005" onclick="RouteSelector.moveTo('P005')">
-      <i class="fa-solid fa-user-gear"></i><span>設定</span>
-    </button>
-  </div>
+
   <script type="text/javascript" src="../common/climbingCore.js"></script>
+  
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+      // 日付フィールドに今日の日付をデフォルトでセット
+      const dateInput = document.getElementById('date');
+      if (dateInput && !dateInput.value) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+      }
+    });
+
+    /**
+     * 送信直前に「本数」と「メモ」を結合して、GASが期待する 'memo' フォームデータに詰め替える
+     */
+    function prepareSubmitData() {
+      const count = document.getElementById('climbCount').value;
+      const memoText = document.getElementById('displayMemo').value;
+      
+      let combinedMemo = `${count}本`;
+      if (memoText.trim() !== "") {
+        combinedMemo += ` / ${memoText}`;
+      }
+      
+      document.getElementById('actualMemo').value = combinedMemo;
+    }
+  </script>
 </body>
 
 </html>

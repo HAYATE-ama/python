@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PROJECT: SEND - トレーニングメニュー</title>
+    <link rel="stylesheet" type="text/css" href="../common/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+    <div id="wrapper">
+        <header class="page-header"
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <button type="button" class="btn-back" onclick="RouteSelector.moveTo('P000')">
+                <i class="fa-solid fa-arrow-left"></i> 戻る
+            </button>
+            <span class="screen-id">SCREEN ID: P004</span>
+        </header>
+
+        <h1>今日のトレーニング</h1>
+
+        <div class="main-card">
+            <div class="ai-coaching-box">
+                <div class="coaching-header"><i class="fa-solid fa-robot"></i> AIコーチの全体評価</div>
+                <p id="overallAdvice"></p>
+            </div>
+            <div id="startTrainingContainer" style="text-align: center; padding: 20px;">
+                <button type="button" id="btnStartTraining" class="btn-submit">トレーニングを開始する</button>
+            </div>
+            <div id="trainingFormContainer" class="hidden">
+                <form id="trainingMenuForm"
+                    data-url="https://script.google.com/macros/s/AKfycbwYG453kPyBUqOfqjj-Fuw4voANXAKuRQiHyNmr7CubLLAifE13yl-r-TT_ao6CPC5P/exec">
+                    <div class="form-group">
+                        <label class="section-label">クライミング（実登）メニュー</label>
+                        <div class="menu-list" id="climbingMenu">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="section-label">フィジカルトレーニング</label>
+                        <div class="menu-list" id="physicalMenu">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="section-label">備考・メモ</label>
+                        <textarea name="memo" rows="3" placeholder="今日の体調やトレーニングの振り返りなど"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">完了を記録する</button>
+                    <div id="message"></div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="global-nav">
+        <button type="button" class="nav-item" id="nav-P001" onclick="RouteSelector.moveTo('P001')">
+            <i class="fa-solid fa-dumbbell"></i><span>ジム</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P002" onclick="RouteSelector.moveTo('P002')">
+            <i class="fa-solid fa-mountain"></i><span>外岩</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P004" onclick="RouteSelector.moveTo('P004')">
+            <i class="fa-solid fa-clipboard-list"></i><span>メニュー</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P003" onclick="RouteSelector.moveTo('P003')">
+            <i class="fa-solid fa-clock-rotate-left"></i><span>履歴</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-P005" onclick="RouteSelector.moveTo('P005')">
+            <i class="fa-solid fa-user-gear"></i><span>設定</span>
+        </button>
+    </div>
+    <script type="text/javascript" src="../common/climbingCore.js"></script>
+</body>
+
+</html>
